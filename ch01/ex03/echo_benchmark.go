@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+func main() {
+	echo1()
+	echo2()
+}
+
 func echo1() {
 	start := time.Now()
 	s, sep := "", ""
@@ -15,16 +20,11 @@ func echo1() {
 		sep = " "
 	}
 	fmt.Println(s)
-	fmt.Printf("%f s\n", time.Since(start).Seconds())
+	fmt.Printf("echo1: %fs\n", time.Since(start).Seconds())
 }
 
 func echo2() {
 	start := time.Now()
 	fmt.Println(strings.Join(os.Args[1:], " "))
-	fmt.Printf("%f s\n", time.Since(start).Seconds())
-}
-
-func main() {
-	echo1()
-	echo2()
+	fmt.Printf("echo2: %fs\n", time.Since(start).Seconds())
 }
