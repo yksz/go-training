@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -30,11 +31,7 @@ func fetch(url string, ch chan<- string) {
 		return
 	}
 
-	filename := url + ".txt"
-	index := strings.Index(url, "://") + len("://")
-	if index > 0 {
-		filename = filename[index:len(filename)]
-	}
+	filename := getFileName(url)
 	file, err := os.Create(filename)
 	if err != nil {
 		ch <- fmt.Sprint(err)
@@ -48,5 +45,27 @@ func fetch(url string, ch chan<- string) {
 		return
 	}
 	secs := time.Since(start).Seconds()
-	ch <- fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
+	ch <- fmt.Sprintf("%.2fs  %7d  %s \t-> %s", secs, nbytes, url, filename)
+}
+
+func getFileName(url string) string {
+	basename := url
+	index := strings.Index(basename, "://") + len("://")
+	if index > 0 {
+		basename = basename[index:len(basename)]
+	}
+
+	filename := basename
+	for i := 1; i <= 10; i++ {
+		if !existsFile(filename) {
+			return filename
+		}
+		filename = basename + "." + strconv.Itoa(i)
+	}
+	return basename
+}
+
+func existsFile(filename string) bool {
+	_, err := os.Stat(filename)
+	return err == nil
 }
