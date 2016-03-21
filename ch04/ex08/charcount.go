@@ -79,7 +79,7 @@ func main() {
 	}
 	fmt.Print("\ncategory count\n")
 	for k, v := range categories {
-		fmt.Printf("%s \t %d\n", k, v)
+		fmt.Printf("%-8s %d\n", k, v)
 	}
 	if invalid > 0 {
 		fmt.Printf("\n%d invalid UTF-8 characters\n", invalid)
