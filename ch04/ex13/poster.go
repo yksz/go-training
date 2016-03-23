@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 )
 
 const omdbURL = "https://omdbapi.com/"
@@ -33,8 +34,8 @@ func downloadMoviePoster(title string) {
 		log.Fatal(err)
 	}
 	if result.Response == "True" {
-		err := download(result.Poster, title+".jpg")
-		if err != nil {
+		filename := strings.Replace(title, " ", "_", -1) + ".jpg"
+		if err := download(result.Poster, filename); err != nil {
 			log.Fatal(err)
 		}
 	} else {
