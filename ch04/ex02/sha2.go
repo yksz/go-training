@@ -14,13 +14,12 @@ func main() {
 	flag.Parse()
 
 	in := bufio.NewReader(os.Stdin)
-	line, err := in.ReadString('\n')
+	line, _, err := in.ReadLine()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "sha2: %v\n", err)
 		os.Exit(1)
 	}
-	line = line[:len(line)-1]
-	hashBySHA(line, *size)
+	hashBySHA(string(line), *size)
 }
 
 func hashBySHA(s string, size int) {
