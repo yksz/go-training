@@ -19,8 +19,8 @@ func main() {
 	lessThanOneMonthOld := make([]*github.Issue, 0)
 	lessThanOneYearOld := make([]*github.Issue, 0)
 	moreThanOneYearOld := make([]*github.Issue, 0)
-	oneMonthAgo := time.Now().Add(-time.Hour * 24 * 30)
-	oneYearAgo := time.Now().Add(-time.Hour * 24 * 365)
+	oneMonthAgo := time.Now().AddDate(0, -1, 0)
+	oneYearAgo := time.Now().AddDate(-1, 0, 0)
 	for _, item := range result.Items {
 		if item.CreatedAt.After(oneMonthAgo) {
 			lessThanOneMonthOld = append(lessThanOneMonthOld, item)
