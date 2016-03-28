@@ -73,6 +73,7 @@ func download(fromURL string, toFile string) error {
 	if err != nil {
 		return err
 	}
+	defer file.Close()
 	_, err = io.Copy(file, resp.Body)
 	if err != nil {
 		return err

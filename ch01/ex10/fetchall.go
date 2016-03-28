@@ -37,6 +37,7 @@ func fetch(url string, ch chan<- string) {
 		ch <- fmt.Sprint(err)
 		return
 	}
+	defer file.Close()
 
 	nbytes, err := io.Copy(file, resp.Body)
 	resp.Body.Close() // don't leak resources

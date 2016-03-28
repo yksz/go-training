@@ -24,6 +24,7 @@ func readPNG(filename string) (image.Image, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close()
 	return png.Decode(file)
 }
 
@@ -32,6 +33,7 @@ func writePNG(img image.Image, filename string) error {
 	if err != nil {
 		return err
 	}
+	defer file.Close()
 	return png.Encode(file, img)
 }
 
