@@ -7,7 +7,7 @@ import (
 
 func main() {
 	s := "\t\n\va\f\rb c　"
-	fmt.Printf("%q\n", squashSpaces([]byte(s))) // "a b c "
+	fmt.Printf("%q\n", squashSpaces([]byte(s))) // " a b c "
 }
 
 func squashSpaces(b []byte) []byte {
