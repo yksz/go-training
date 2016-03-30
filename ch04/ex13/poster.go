@@ -35,7 +35,7 @@ func downloadMoviePoster(title string) {
 	}
 	if result.Response == "True" {
 		filename := strings.Replace(title, " ", "_", -1) + ".jpg"
-		if err := download(result.Poster, filename); err != nil {
+		if err := fetch(result.Poster, filename); err != nil {
 			log.Fatal(err)
 		}
 	} else {
@@ -64,18 +64,20 @@ func obtainMovieInformation(title string) (*movieSearchResult, error) {
 	return &result, nil
 }
 
-func download(fromURL string, toFile string) error {
-	resp, err := http.Get(fromURL)
-	if err != nil {
-		return err
-	}
-	file, err := os.Create(toFile)
+func fetch(url, filename string) error {
+	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-	_, err = io.Copy(file, resp.Body)
+
+	resp, err := http.Get(url)
 	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if _, err := io.Copy(file, resp.Body); err != nil {
 		return err
 	}
 	return nil
