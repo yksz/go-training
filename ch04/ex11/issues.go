@@ -42,7 +42,7 @@ func getIssues(repo string) error {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Status: %s", resp.Status)
+		return fmt.Errorf("status: %s", resp.Status)
 	}
 	var issues []Issue
 	if err := json.NewDecoder(resp.Body).Decode(&issues); err != nil {
@@ -62,7 +62,7 @@ func getIssue(repo string, num int) error {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Status: %s", resp.Status)
+		return fmt.Errorf("status: %s", resp.Status)
 	}
 	var issue Issue
 	if err := json.NewDecoder(resp.Body).Decode(&issue); err != nil {
@@ -88,7 +88,7 @@ func createIssue(repo string, user, passwd, title, comment string) error {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Status: %s", resp.Status)
+		return fmt.Errorf("status: %s", resp.Status)
 	}
 	return nil
 }
@@ -106,7 +106,7 @@ func editIssue(repo string, num int, user, passwd, title, comment string) error 
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Status: %s", resp.Status)
+		return fmt.Errorf("status: %s", resp.Status)
 	}
 	return nil
 }
@@ -124,7 +124,7 @@ func closeIssues(repo string, num int, user, passwd string) error {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Status: %s", resp.Status)
+		return fmt.Errorf("status: %s", resp.Status)
 	}
 	return nil
 }

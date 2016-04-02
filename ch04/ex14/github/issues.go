@@ -54,7 +54,7 @@ func fetch(url, filename string) error {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Status: %s", resp.Status)
+		return fmt.Errorf("status: %s", resp.Status)
 	}
 
 	if _, err := io.Copy(file, resp.Body); err != nil {

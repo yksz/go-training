@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -47,9 +46,9 @@ func main() {
 }
 
 func getRange(str string) (int, int, error) {
-	s := strings.SplitN(str, "-", 2)
+	s := strings.SplitN(str, "-", -1)
 	if len(s) != 2 {
-		return 0, 0, errors.New("Invalid range")
+		return 0, 0, fmt.Errorf("invalid range: %s", str)
 	}
 	from, err := strconv.Atoi(s[0])
 	if err != nil {
