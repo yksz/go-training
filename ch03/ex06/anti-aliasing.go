@@ -11,7 +11,7 @@ import (
 func main() {
 	if len(os.Args) <= 2 {
 		fmt.Printf("usage: %s <src> <dst>\n", os.Args[0])
-		os.Exit(0)
+		os.Exit(1)
 	}
 	src := os.Args[1]
 	dst := os.Args[2]

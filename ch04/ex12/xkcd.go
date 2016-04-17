@@ -34,7 +34,7 @@ func init() {
 func main() {
 	if len(os.Args) <= 2 {
 		fmt.Printf("usage: %s <search range> <search word>\n", os.Args[0])
-		os.Exit(0)
+		os.Exit(1)
 	}
 	from, to, err := getRange(os.Args[1])
 	if err != nil {

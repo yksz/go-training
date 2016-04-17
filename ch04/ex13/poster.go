@@ -22,7 +22,7 @@ type movieSearchResult struct {
 func main() {
 	if len(os.Args) <= 1 {
 		fmt.Printf("usage: %s <movie title>\n", os.Args[0])
-		os.Exit(0)
+		os.Exit(1)
 	}
 	title := os.Args[1]
 	downloadMoviePoster(title)
