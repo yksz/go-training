@@ -17,7 +17,7 @@ func init() {
 
 func GetIssues(repo string) ([]*Issue, error) {
 	filename := cacheDir + strings.Replace(repo, "/", "_", -1)
-	if !Exists(filename) {
+	if !exists(filename) {
 		url := ReposURL + repo + "/issues"
 		if err := fetch(url, filename); err != nil {
 			return nil, err
@@ -36,7 +36,7 @@ func GetIssues(repo string) ([]*Issue, error) {
 	return result, nil
 }
 
-func Exists(filename string) bool {
+func exists(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil
 }

@@ -58,7 +58,7 @@ func getFileName(url string) string {
 
 	filename := basename
 	for i := 1; i <= 10; i++ {
-		if !existsFile(filename) {
+		if !exists(filename) {
 			return filename
 		}
 		filename = basename + "." + strconv.Itoa(i)
@@ -66,7 +66,7 @@ func getFileName(url string) string {
 	return basename
 }
 
-func existsFile(filename string) bool {
+func exists(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil
 }

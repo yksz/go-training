@@ -77,7 +77,7 @@ func searchComics(from, to int, words []string) error {
 
 func searchComic(num int, words []string, ch chan<- string) {
 	filename := cacheDir + strconv.Itoa(num)
-	if !Exists(filename) {
+	if !exists(filename) {
 		url := prefixURL + strconv.Itoa(num) + suffixURL
 		if err := fetch(url, filename); err != nil {
 			ch <- fmt.Sprint(err)
@@ -109,7 +109,7 @@ func searchComic(num int, words []string, ch chan<- string) {
 	ch <- ""
 }
 
-func Exists(filename string) bool {
+func exists(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil
 }
