@@ -15,12 +15,16 @@ func main() {
 	}
 	headings := ElementsByTagName(doc, "h1", "h2", "h3", "h4")
 	for _, h := range headings {
-		fmt.Printf("<%s>", h.Data)
-		if h.FirstChild != nil {
-			fmt.Printf("%s", h.FirstChild.Data)
-		}
-		fmt.Printf("</%s>\n", h.Data)
+		printElement(h)
 	}
+}
+
+func printElement(elem *html.Node) {
+	fmt.Printf("<%s>", elem.Data)
+	if elem.FirstChild != nil {
+		fmt.Printf("%s", elem.FirstChild.Data)
+	}
+	fmt.Printf("</%s>\n", elem.Data)
 }
 
 func ElementsByTagName(doc *html.Node, name ...string) []*html.Node {
