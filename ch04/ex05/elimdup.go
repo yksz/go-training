@@ -8,13 +8,13 @@ func main() {
 }
 
 func eliminateDuplicates(strings []string) []string {
-	out := strings[:1]
+	result := strings[:1]
 	prev := strings[0]
 	for _, s := range strings[1:] {
 		if s != prev {
-			out = append(out, s)
+			result = append(result, s)
 		}
 		prev = s
 	}
-	return out
+	return result
 }

@@ -12,18 +12,18 @@ func main() {
 
 func squashSpaces(b []byte) []byte {
 	runes := []rune(string(b))
-	out := runes[:0]
+	result := runes[:0]
 	spaced := false
 	for _, r := range runes {
 		if unicode.IsSpace(r) {
 			if !spaced {
-				out = append(out, ' ')
+				result = append(result, ' ')
 				spaced = true
 			}
 		} else {
-			out = append(out, r)
+			result = append(result, r)
 			spaced = false
 		}
 	}
-	return []byte(string(out))
+	return []byte(string(result))
 }
