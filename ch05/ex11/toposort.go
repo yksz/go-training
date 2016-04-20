@@ -6,6 +6,11 @@ import (
 	"sort"
 )
 
+const (
+	temporary = iota + 1
+	permanent
+)
+
 // prereqs maps computer science courses to their prerequisites.
 var prereqs = map[string][]string{
 	"algorithms":     {"data structures"},
@@ -35,19 +40,17 @@ func main() {
 
 func topoSort(m map[string][]string) []string {
 	var order []string
-	seen := make(map[string]bool)
-	var visitAll func(items, pres []string)
+	seen := make(map[string]int)
+	var visitAll func(items []string)
 
-	visitAll = func(items, pres []string) {
+	visitAll = func(items []string) {
 		for _, item := range items {
-			for _, pre := range pres {
-				if item == pre {
-					fmt.Printf("cycles: %s\n", item)
-				}
-			}
-			if !seen[item] {
-				seen[item] = true
-				visitAll(m[item], append(pres, item))
+			if seen[item] == temporary {
+				fmt.Printf("cycles: %s\n", item)
+			} else if _, ok := seen[item]; !ok {
+				seen[item] = temporary
+				visitAll(m[item])
+				seen[item] = permanent
 				order = append(order, item)
 			}
 		}
@@ -59,6 +62,6 @@ func topoSort(m map[string][]string) []string {
 	}
 
 	sort.Strings(keys)
-	visitAll(keys, nil)
+	visitAll(keys)
 	return order
 }
