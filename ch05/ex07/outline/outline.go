@@ -1,8 +1,9 @@
 // Outline prints the outline of an HTML document tree.
-package main
+package outline
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"strings"
@@ -10,13 +11,9 @@ import (
 	"golang.org/x/net/html"
 )
 
-func main() {
-	for _, url := range os.Args[1:] {
-		outline(url)
-	}
-}
+var out io.Writer = os.Stdout
 
-func outline(url string) error {
+func Outline(url string) error {
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -56,27 +53,25 @@ var depth int
 func startElement(n *html.Node) {
 	if n.Type == html.ElementNode {
 		if n.FirstChild != nil {
-			fmt.Printf("%*s<%s%s>\n", depth*2, "", n.Data, getAttrs(n))
-			s := strings.TrimSpace(n.FirstChild.Data)
-			if s != "" {
-				fmt.Printf("%*s%s\n", (depth+1)*2, "", formatText(s, depth+1))
+			fmt.Fprintf(out, "%*s<%s%s>\n", depth*2, "", n.Data, getAttrs(n))
+			if n.FirstChild.Type == html.TextNode {
+				s := strings.TrimSpace(n.FirstChild.Data)
+				if s != "" {
+					fmt.Fprintf(out, "%s\n", s)
+				}
 			}
+		} else {
+			fmt.Fprintf(out, "%*s<%s%s>\n", depth*2, "", n.Data, getAttrs(n))
 		}
 		depth++
 	}
-}
-
-func formatText(s string, depth int) string {
-	return strings.Replace(s, "\n", "\n"+fmt.Sprintf("%*s", depth*2, ""), -1)
 }
 
 func endElement(n *html.Node) {
 	if n.Type == html.ElementNode {
 		depth--
 		if n.FirstChild != nil {
-			fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
-		} else {
-			fmt.Printf("%*s<%s%s/>\n", depth*2, "", n.Data, getAttrs(n))
+			fmt.Fprintf(out, "%*s</%s>\n", depth*2, "", n.Data)
 		}
 	}
 }
@@ -84,7 +79,11 @@ func endElement(n *html.Node) {
 func getAttrs(n *html.Node) string {
 	s := ""
 	for _, a := range n.Attr {
-		s += fmt.Sprintf(" %s=\"%s\"", a.Key, a.Val)
+		if a.Val != "" {
+			s += fmt.Sprintf(" %s=\"%s\"", a.Key, a.Val)
+		} else {
+			s += fmt.Sprintf(" %s", a.Key)
+		}
 	}
 	return s
 }
