@@ -10,9 +10,9 @@ func square(x int) (result int) {
 			result = x * x
 		}
 	}()
-	panic("")
+	panic(result)
 }
 
 func main() {
-	fmt.Println(square(16)) // 256
+	fmt.Println(square(16)) // "256"
 }
