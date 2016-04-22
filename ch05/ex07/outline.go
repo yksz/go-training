@@ -1,5 +1,5 @@
 // Outline prints the outline of an HTML document tree.
-package outline
+package main
 
 import (
 	"fmt"
@@ -13,7 +13,13 @@ import (
 
 var out io.Writer = os.Stdout
 
-func Outline(url string) error {
+func main() {
+	for _, url := range os.Args[1:] {
+		outline(url)
+	}
+}
+
+func outline(url string) error {
 	resp, err := http.Get(url)
 	if err != nil {
 		return err

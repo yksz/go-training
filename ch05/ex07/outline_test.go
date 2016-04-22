@@ -1,4 +1,4 @@
-package outline
+package main
 
 import (
 	"bytes"
@@ -9,12 +9,12 @@ import (
 )
 
 func TestOutline(t *testing.T) {
-	url := "http://www.gopl.io"
+	url := "http://gopl.io"
 
 	var buf *bytes.Buffer
 	buf = new(bytes.Buffer)
 	out = buf
-	Outline(url)
+	outline(url)
 	outlineHTML := buf.String()
 
 	doc, err := html.Parse(buf)
