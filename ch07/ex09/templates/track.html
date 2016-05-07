@@ -1,0 +1,19 @@
+<table border=1>
+  <tr style="text-align: left">
+    <th onclick="requestSort('title')">Title</th>
+    <th onclick="requestSort('artist')">Artist</th>
+    <th onclick="requestSort('album')">Album</th>
+    <th onclick="requestSort('year')">Year</th>
+    <th onclick="requestSort('length')">Length</th>
+  </tr>
+  {{range .}}
+  <tr>
+    <td>{{.Title}}</td>
+    <td>{{.Artist}}</td>
+    <td>{{.Album}}</td>
+    <td>{{.Year}}</td>
+    <td>{{.Length}}</td>
+  </tr>
+  {{end}}
+</table>
+<script src="/js/request.js"></script>
