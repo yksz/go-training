@@ -42,29 +42,11 @@ func (x byTitle) Len() int           { return len(x) }
 func (x byTitle) Less(i, j int) bool { return x[i].Title < x[j].Title }
 func (x byTitle) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
 
-type byArtist []*Track
-
-func (x byArtist) Len() int           { return len(x) }
-func (x byArtist) Less(i, j int) bool { return x[i].Artist < x[j].Artist }
-func (x byArtist) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
-
-type byAlbum []*Track
-
-func (x byAlbum) Len() int           { return len(x) }
-func (x byAlbum) Less(i, j int) bool { return x[i].Album < x[j].Album }
-func (x byAlbum) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
-
 type byYear []*Track
 
 func (x byYear) Len() int           { return len(x) }
 func (x byYear) Less(i, j int) bool { return x[i].Year < x[j].Year }
 func (x byYear) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
-
-type byLength []*Track
-
-func (x byLength) Len() int           { return len(x) }
-func (x byLength) Less(i, j int) bool { return x[i].Length < x[j].Length }
-func (x byLength) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
 
 func copyTracks(src []*Track) []*Track {
 	var dst []*Track
@@ -77,16 +59,16 @@ func copyTracks(src []*Track) []*Track {
 
 func main() {
 	{
-		cs := CustomSort{}
+		s := new(CustomSort)
 
 		fmt.Println("\nCustom: byYear:")
 		t1 := copyTracks(tracks)
-		sort.Sort(cs.Sort(t1, "year"))
+		s.Sort(t1, "year")
 		printTracks(t1)
 
 		fmt.Println("\nCustom: byTitle:")
 		t2 := copyTracks(tracks)
-		sort.Sort(cs.Sort(t2, "title"))
+		s.Sort(t2, "title")
 		printTracks(t2)
 	}
 	{

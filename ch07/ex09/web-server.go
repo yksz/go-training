@@ -4,7 +4,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"sort"
 	"time"
 
 	. "../ex08/sorting"
@@ -26,7 +25,7 @@ func length(s string) time.Duration {
 }
 
 func main() {
-	customSort := CustomSort{}
+	customSort := new(CustomSort)
 	trackTemplate := template.Must(template.ParseFiles("templates/track.html"))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +37,7 @@ func main() {
 		t := copyTracks(tracks)
 		sortKey := r.FormValue("sort")
 		if sortKey != "" {
-			sort.Sort(customSort.Sort(t, sortKey))
+			customSort.Sort(t, sortKey)
 		}
 		if err := trackTemplate.Execute(w, t); err != nil {
 			log.Print(err)

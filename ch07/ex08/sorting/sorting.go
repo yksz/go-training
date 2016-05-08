@@ -1,6 +1,7 @@
 package sorting
 
 import (
+	"sort"
 	"time"
 )
 
@@ -17,7 +18,7 @@ type CustomSort struct {
 	keys []string
 }
 
-func (x *CustomSort) Sort(t []*Track, key string) *CustomSort {
+func (x *CustomSort) Sort(t []*Track, key string) {
 	x.t = t
 
 	// remove key from x.keys
@@ -29,14 +30,15 @@ func (x *CustomSort) Sort(t []*Track, key string) *CustomSort {
 	}
 	// append key to the head
 	x.keys = append([]string{key}, newKeys...)
-	return x
+
+	sort.Sort(x)
 }
 
-func (x CustomSort) Len() int {
+func (x *CustomSort) Len() int {
 	return len(x.t)
 }
 
-func (x CustomSort) Less(i, j int) bool {
+func (x *CustomSort) Less(i, j int) bool {
 	for _, key := range x.keys {
 		switch key {
 		case "title":
@@ -64,6 +66,6 @@ func (x CustomSort) Less(i, j int) bool {
 	return false
 }
 
-func (x CustomSort) Swap(i, j int) {
+func (x *CustomSort) Swap(i, j int) {
 	x.t[i], x.t[j] = x.t[j], x.t[i]
 }
