@@ -21,11 +21,14 @@ func handleConn(c net.Conn) {
 	}
 }
 
-func main() {
-	var port int
-	flag.IntVar(&port, "port", 8000, "port")
-	flag.Parse()
+var port int
 
+func init() {
+	flag.IntVar(&port, "port", 8000, "port number")
+	flag.Parse()
+}
+
+func main() {
 	listener, err := net.Listen("tcp", "localhost:"+strconv.Itoa(port))
 	if err != nil {
 		log.Fatal(err)
