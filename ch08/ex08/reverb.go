@@ -24,8 +24,8 @@ func handleConn(c net.Conn) {
 	go func() {
 		input := bufio.NewScanner(c)
 		for input.Scan() {
-			go echo(c, input.Text(), 1*time.Second)
 			keepalive <- struct{}{}
+			go echo(c, input.Text(), 1*time.Second)
 		}
 	}()
 	for {
