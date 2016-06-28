@@ -10,6 +10,13 @@ import (
 	"time"
 )
 
+var port int
+
+func init() {
+	flag.IntVar(&port, "port", 8000, "port number")
+	flag.Parse()
+}
+
 func handleConn(c net.Conn) {
 	defer c.Close()
 	for {
@@ -19,13 +26,6 @@ func handleConn(c net.Conn) {
 		}
 		time.Sleep(1 * time.Second)
 	}
-}
-
-var port int
-
-func init() {
-	flag.IntVar(&port, "port", 8000, "port number")
-	flag.Parse()
 }
 
 func main() {
