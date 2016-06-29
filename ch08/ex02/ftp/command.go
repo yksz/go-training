@@ -6,17 +6,21 @@ const (
 	Unknown command = iota
 	User
 	Quit
+	Cwd
 	Port
 	Type
 	Retr
 	Stor
+	List
 )
 
 var commands = map[string]command{
 	"USER": User,
 	"QUIT": Quit,
+	"CWD":  Cwd,
 	"PORT": Port,
 	"TYPE": Type,
 	"RETR": Retr,
 	"STOR": Stor,
+	"LIST": List,
 }

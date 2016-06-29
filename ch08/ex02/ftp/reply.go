@@ -1,6 +1,11 @@
 package ftp
 
 var replies = map[int]string{
+	110: "Restart marker reply.",
+	120: "Service ready in nnn minutes.",
+	125: "Data connection already open; transfer starting.",
+	150: "File status okay; about to open data connection.",
+
 	200: "Command okay.",
 	202: "Command not implemented, superfluous at this site.",
 	211: "System status, or system help reply.",
