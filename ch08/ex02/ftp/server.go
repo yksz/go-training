@@ -10,9 +10,21 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 )
+
+var homeDir string
+
+func init() {
+	switch runtime.GOOS {
+	case "linux":
+		homeDir = "/home/"
+	case "darwin":
+		homeDir = "/Users/"
+	}
+}
 
 func ListenAndServe(port int) {
 	listener, err := net.Listen("tcp", "localhost:"+strconv.Itoa(port))
@@ -56,6 +68,7 @@ type controlConn struct {
 type session struct {
 	user         string
 	workingDir   string
+	dataType     dataType
 	dataConnAddr string
 }
 
@@ -113,7 +126,8 @@ func (c *controlConn) execute(cmd command, args []string) {
 		}
 		c.session = &session{
 			user:       user,
-			workingDir: "/home/" + user}
+			workingDir: homeDir + user,
+			dataType:   Ascii}
 		c.reply(230)
 	case Quit:
 		c.session = nil
@@ -141,7 +155,19 @@ func (c *controlConn) execute(cmd command, args []string) {
 		c.session.dataConnAddr = ipAddr + ":" + strconv.Itoa(port)
 		c.reply(200)
 	case Type:
-		c.reply(502)
+		s, ok := paramAsString(args)
+		if !ok {
+			c.reply(501)
+			return
+		}
+		dataType, ok := dataTypes[s]
+		if !ok {
+			log.Printf("unknown type: %s\n", s)
+			c.reply(504)
+			return
+		}
+		c.session.dataType = dataType
+		c.reply(200)
 	case Retr:
 		filename, ok := paramAsString(args)
 		if !ok {
@@ -174,7 +200,7 @@ func (c *controlConn) execute(cmd command, args []string) {
 		c.sendData(bytes)
 	case Stor:
 		c.reply(502)
-	case List:
+	case List, Nlst:
 		list, err := fileList(c.session.workingDir)
 		if err != nil {
 			log.Print(err)
@@ -210,7 +236,7 @@ func paramAsString(args []string) (string, bool) {
 }
 
 func authenticate(user string) bool {
-	return exists("/home/" + user)
+	return exists(homeDir + user)
 }
 
 func exists(filename string) bool {

@@ -12,6 +12,7 @@ const (
 	Retr
 	Stor
 	List
+	Nlst
 )
 
 var commands = map[string]command{
@@ -23,4 +24,5 @@ var commands = map[string]command{
 	"RETR": Retr,
 	"STOR": Stor,
 	"LIST": List,
+	"NLST": Nlst,
 }
