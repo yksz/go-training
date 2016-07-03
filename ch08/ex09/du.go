@@ -30,8 +30,8 @@ func main() {
 	for _, root := range roots {
 		n.Add(1)
 		go func(dir string) {
+			defer n.Done()
 			du(dir)
-			n.Done()
 		}(root)
 	}
 	n.Wait()
