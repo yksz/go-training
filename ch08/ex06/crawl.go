@@ -46,11 +46,6 @@ func main() {
 	worklist := make(chan []link)  // lists of URLs, may have duplicates
 	unseenLinks := make(chan link) // de-duplicated URLs
 
-	defer func() {
-		close(worklist)
-		close(unseenLinks)
-	}()
-
 	// Add command-line arguments to worklist.
 	go func() { worklist <- newLinks(flag.Args(), 0) }()
 
