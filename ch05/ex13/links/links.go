@@ -22,16 +22,16 @@ func Extract(urlStr string) ([]string, error) {
 		return nil, fmt.Errorf("%s: %v", urlStr, err)
 	}
 
-	_, localFile, n, err := fetch(url)
+	filename, n, err := fetch(url)
 	if err != nil {
 		return nil, fmt.Errorf("fetching %s: %v", url, err)
 	}
-	if localFile == "" {
+	if filename == "" {
 		return nil, nil
 	}
-	fmt.Printf("%s => %s (%d bytes).\n", url, localFile, n)
+	fmt.Printf("%s => %s (%d bytes).\n", url, filename, n)
 
-	file, err := os.Open(localFile)
+	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -66,14 +66,14 @@ func Extract(urlStr string) ([]string, error) {
 
 // Fetch downloads the URL and returns the
 // name and length of the local file.
-func fetch(url *url.URL) (r *http.Response, filename string, n int64, err error) {
+func fetch(url *url.URL) (filename string, n int64, err error) {
 	resp, err := http.Get(url.String())
 	if err != nil {
-		return nil, "", 0, err
+		return "", 0, err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return nil, "", 0, fmt.Errorf("getting %s: %s", url, resp.Status)
+		return "", 0, fmt.Errorf("getting %s: %s", url, resp.Status)
 	}
 
 	dir, file := path.Split(url.Path)
@@ -83,17 +83,17 @@ func fetch(url *url.URL) (r *http.Response, filename string, n int64, err error)
 	if file == "" {
 		file = "index.html"
 	}
-	dir = archiveDir + url.Host + dir
-	localFile := dir + file
+	localDir := archiveDir + url.Host + dir
+	localFile := localDir + file
 
-	os.MkdirAll(dir, 0755)
+	os.MkdirAll(localDir, 0755)
 	if exists(localFile) {
 		log.Printf("local file already exists: %s\n", localFile)
-		return nil, "", 0, nil
+		return "", 0, nil
 	}
 	f, err := os.Create(localFile)
 	if err != nil {
-		return nil, "", 0, err
+		return "", 0, err
 	}
 
 	n, err = io.Copy(f, resp.Body)
@@ -101,7 +101,7 @@ func fetch(url *url.URL) (r *http.Response, filename string, n int64, err error)
 	if closeErr := f.Close(); err == nil {
 		err = closeErr
 	}
-	return resp, localFile, n, err
+	return localFile, n, err
 }
 
 func exists(filename string) bool {
