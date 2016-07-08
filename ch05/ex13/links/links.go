@@ -3,6 +3,7 @@ package links
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -11,7 +12,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-var downloadDir = "./downloads"
+var archiveDir = "./archive/"
 
 // Extract makes an HTTP GET request to the specified URL, parses
 // the response as HTML, and returns the links in the HTML document.
@@ -21,21 +22,21 @@ func Extract(urlStr string) ([]string, error) {
 		return nil, fmt.Errorf("%s: %v", urlStr, err)
 	}
 
-	resp, local, n, err := fetch(url)
+	_, localFile, n, err := fetch(url)
 	if err != nil {
 		return nil, fmt.Errorf("fetching %s: %v", url, err)
 	}
-	if local == "" {
+	if localFile == "" {
 		return nil, nil
 	}
-	fmt.Printf("%s => %s (%d bytes).\n", url, local, n)
+	fmt.Printf("%s => %s (%d bytes).\n", url, localFile, n)
 
-	file, err := os.Open(local)
+	file, err := os.Open(localFile)
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close()
 	doc, err := html.Parse(file)
-	file.Close()
 	if err != nil {
 		return nil, fmt.Errorf("parsing %s as HTML: %v", url, err)
 	}
@@ -47,11 +48,12 @@ func Extract(urlStr string) ([]string, error) {
 				if a.Key != "href" {
 					continue
 				}
-				link, err := resp.Request.URL.Parse(a.Val)
+				link, err := url.Parse(a.Val)
 				if err != nil {
 					continue // ignore bad URLs
 				}
 				if link.Host != url.Host {
+					log.Printf("different domain: %s\n", link.Host)
 					continue
 				}
 				links = append(links, link.String())
@@ -70,9 +72,7 @@ func fetch(url *url.URL) (r *http.Response, filename string, n int64, err error)
 		return nil, "", 0, err
 	}
 	defer resp.Body.Close()
-
 	if resp.StatusCode != http.StatusOK {
-		resp.Body.Close()
 		return nil, "", 0, fmt.Errorf("getting %s: %s", url, resp.Status)
 	}
 
@@ -83,13 +83,15 @@ func fetch(url *url.URL) (r *http.Response, filename string, n int64, err error)
 	if file == "" {
 		file = "index.html"
 	}
-	local := downloadDir + dir + file
+	dir = archiveDir + url.Host + dir
+	localFile := dir + file
 
-	os.MkdirAll(downloadDir+dir, 0755)
-	if exists(local) {
+	os.MkdirAll(dir, 0755)
+	if exists(localFile) {
+		log.Printf("local file already exists: %s\n", localFile)
 		return nil, "", 0, nil
 	}
-	f, err := os.Create(local)
+	f, err := os.Create(localFile)
 	if err != nil {
 		return nil, "", 0, err
 	}
@@ -99,7 +101,7 @@ func fetch(url *url.URL) (r *http.Response, filename string, n int64, err error)
 	if closeErr := f.Close(); err == nil {
 		err = closeErr
 	}
-	return resp, local, n, err
+	return resp, localFile, n, err
 }
 
 func exists(filename string) bool {

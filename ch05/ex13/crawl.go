@@ -34,6 +34,13 @@ func crawl(url string) []string {
 }
 
 func main() {
+	defer func() {
+		err := recover()
+		if err != nil {
+			log.Print(err)
+		}
+	}()
+
 	// Crawl the web breadth-first,
 	// starting from the command-line arguments.
 	breadthFirst(crawl, os.Args[1:])
