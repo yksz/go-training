@@ -15,20 +15,20 @@ func init() {
 
 type player struct {
 	name  string
-	court chan int
+	table chan int
 }
 
 func (p *player) rally(to *player, abort <-chan struct{}) {
 	count := 0
 	for {
 		select {
-		case ball := <-p.court:
+		case ball := <-p.table:
 			if *vFlag {
 				fmt.Printf("%s: %d\n", p.name, ball)
 			}
 			count = ball
 			ball++
-			to.court <- ball
+			to.table <- ball
 		case <-abort:
 			fmt.Printf("%s: rally=%d\n", p.name, count)
 			return
@@ -37,7 +37,7 @@ func (p *player) rally(to *player, abort <-chan struct{}) {
 }
 
 func newPlayer(name string) *player {
-	return &player{name: name, court: make(chan int)}
+	return &player{name: name, table: make(chan int)}
 }
 
 func main() {
@@ -63,6 +63,6 @@ func main() {
 		}
 		wg.Done()
 	}()
-	player1.court <- 0
+	player1.table <- 0
 	wg.Wait()
 }
