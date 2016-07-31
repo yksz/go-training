@@ -10,9 +10,9 @@ func randomNonPalindrome(rng *rand.Rand) string {
 	n := rng.Intn(23) + 2 // random length: 2-24
 	runes := make([]rune, n)
 	for i := 0; i < (n+1)/2; i++ {
-		randNum := rng.Intn(93) + 33 // ascii: 33-125
-		runes[i] = rune(randNum)
-		runes[n-1-i] = rune(randNum + 1)
+		randN := rng.Intn(93) + 33 // ascii: 33-125
+		runes[i] = rune(randN)
+		runes[n-1-i] = rune(randN + 1)
 	}
 	return string(runes)
 }
