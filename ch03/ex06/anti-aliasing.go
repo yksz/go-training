@@ -54,8 +54,8 @@ func resize(img image.Image, newwidth, newheight int) image.Image {
 		for newx := 0; newx < newwidth; newx++ {
 			x := (int)(float32(newx) * hrate)
 			y := (int)(float32(newy) * vrate)
-			x = within(x, 0, width-1)
-			y = within(y, 0, height-1)
+			x = constrain(x, 0, width-1)
+			y = constrain(y, 0, height-1)
 			newimg.Set(newx, newy, img.At(x, y))
 		}
 	}
@@ -71,8 +71,8 @@ func average(img image.Image) image.Image {
 			var rsum, gsum, bsum uint32
 			for j := -1; j <= 1; j++ {
 				for i := -1; i <= 1; i++ {
-					px := within(x+i, 0, width-1)
-					py := within(y+j, 0, width-1)
+					px := constrain(x+i, 0, width-1)
+					py := constrain(y+j, 0, width-1)
 					r, g, b, _ := img.At(px, py).RGBA()
 					rsum += r >> 8
 					gsum += g >> 8
@@ -89,7 +89,7 @@ func average(img image.Image) image.Image {
 	return newimg
 }
 
-func within(x, min, max int) int {
+func constrain(x, min, max int) int {
 	if x < min {
 		return min
 	} else if x > max {
