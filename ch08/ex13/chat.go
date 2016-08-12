@@ -40,7 +40,7 @@ func broadcaster() {
 
 func handleConn(conn net.Conn) {
 	keepalive := make(chan struct{})
-	go clientCloser(conn, 10*time.Second, keepalive)
+	go clientCloser(conn, 5*time.Minute, keepalive)
 
 	ch := make(chan string) // outgoing client messages
 	go clientWriter(conn, ch)
