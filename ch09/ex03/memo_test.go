@@ -37,13 +37,17 @@ func TestGetWithDone(t *testing.T) {
 		done <- struct{}{}
 	}()
 
+	// not cached
+	if elapsed := elapsedTime(func() { m.Get(processingTimeStr, nil) }); elapsed < processingTime {
+		t.Errorf("not cached: elapsed=%s", elapsed)
+	}
 	// done
 	if elapsed := elapsedTime(func() { m.Get(processingTimeStr, done) }); elapsed > processingTime {
 		t.Errorf("done: elapsed=%s", elapsed)
 	}
-	// not cached
+	// not cached with done
 	if elapsed := elapsedTime(func() { m.Get(processingTimeStr, nil) }); elapsed < processingTime {
-		t.Errorf("not cached: elapsed=%s", elapsed)
+		t.Errorf("not cached with done: elapsed=%s", elapsed)
 	}
 }
 

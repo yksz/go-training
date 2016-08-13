@@ -36,7 +36,11 @@ func New(f Func) *Memo {
 
 func (memo *Memo) Get(key string, done <-chan struct{}) (interface{}, error) {
 	response := make(chan result)
-	memo.requests <- request{key, response, false}
+	if done == nil {
+		memo.requests <- request{key, response, false}
+	} else {
+		memo.requests <- request{key, response, true}
+	}
 	select {
 	case res := <-response:
 		return res.value, res.err
