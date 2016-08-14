@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"gopl.io/ch6/intset"
+	"../ex02/intset"
 )
 
 var randN int
@@ -21,26 +21,45 @@ func init() {
 	fmt.Printf("Random number: %d\n", randN)
 }
 
-func BenchmarkHas(b *testing.B) {
+func BenchmarkIntSet_Has(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var x intset.IntSet
-		x.Add(randN)
 		x.Has(randN)
 	}
 }
 
-func BenchmarkAdd(b *testing.B) {
+func BenchmarkIntSet_Add(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var x intset.IntSet
 		x.Add(randN)
 	}
 }
 
-func BenchmarkUnionWith(b *testing.B) {
+func BenchmarkIntSet_UnionWith(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var x, y intset.IntSet
-		x.Add(randN)
-		y.Add(randN)
 		x.UnionWith(&y)
+	}
+}
+
+func BenchmarkMapIntSet_Has(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		x := intset.NewMapIntSet()
+		x.Has(randN)
+	}
+}
+
+func BenchmarkMapIntSet_Add(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		x := intset.NewMapIntSet()
+		x.Add(randN)
+	}
+}
+
+func BenchmarkMapIntSet_UnionWith(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		x := intset.NewMapIntSet()
+		y := intset.NewMapIntSet()
+		x.UnionWith(y)
 	}
 }
