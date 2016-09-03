@@ -22,5 +22,5 @@ func Example() {
 	fmt.Printf("%s\n", data)
 
 	// Output:
-	// ( (Uint 1) )
+	// ((Uint 1))
 }

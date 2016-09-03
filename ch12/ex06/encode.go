@@ -52,19 +52,24 @@ func encode(buf *bytes.Buffer, v reflect.Value) error {
 		buf.WriteByte(')')
 
 	case reflect.Struct: // ((name value) ...)
+		var isPrevZero bool
 		buf.WriteByte('(')
 		for i := 0; i < v.NumField(); i++ {
 			if isZero(v.Field(i)) {
+				isPrevZero = true
 				continue
 			}
-			buf.WriteByte(' ')
+			if i > 0 && !isPrevZero {
+				buf.WriteByte(' ')
+			}
+			isPrevZero = false
 			fmt.Fprintf(buf, "(%s ", v.Type().Field(i).Name)
 			if err := encode(buf, v.Field(i)); err != nil {
 				return err
 			}
 			buf.WriteByte(')')
 		}
-		buf.WriteString(" )")
+		buf.WriteByte(')')
 
 	case reflect.Map: // ((key value) ...)
 		buf.WriteByte('(')
