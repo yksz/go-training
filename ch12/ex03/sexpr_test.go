@@ -16,8 +16,13 @@ func Example1() {
 		Interface: []int{1, 2, 3},
 	}
 
-	data, _ := Marshal(obj)
+	data, err := Marshal(obj)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Printf("%s\n", data)
+
 	// Output:
 	// ((Bool t) (Float32 1.200000) (Complex64 #C(1.000000 2.000000)) (Interface ("[]int" (1 2 3))))
 }
@@ -36,8 +41,13 @@ func Example2() {
 		Interface:  []string{"1", "2", "3"},
 	}
 
-	data, _ := Marshal(obj)
+	data, err := Marshal(obj)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Printf("%s\n", data)
+
 	// Output:
 	// ((Bool t) (Float64 3.400000) (Complex128 #C(3.000000 4.000000)) (Interface ("[]string" ("1" "2" "3"))))
 }

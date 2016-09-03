@@ -22,8 +22,13 @@ func Example() {
 		Interface:  []int{1, 2, 3},
 	}
 
-	data, _ := MarshalIndent(obj)
+	data, err := MarshalIndent(obj)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Printf("%s\n", data)
+
 	// Output:
 	// ((BoolT t) (BoolF nil) (Float32 1.200000) (Float64 3.400000)
 	//  (Complex64 #C(1.000000 2.000000)) (Complex128 #C(3.000000 4.000000))
