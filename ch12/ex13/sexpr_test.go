@@ -31,7 +31,7 @@ func Test(t *testing.T) {
 	}
 
 	// Check it
-	var want = `((Title "Dr. Strangelove")` +
+	want := `((Title "Dr. Strangelove")` +
 		` (Subtitle "How I Learned to Stop Worrying and Love the Bomb")` +
 		` (year 1964)` +
 		` (oscars` +
@@ -40,7 +40,7 @@ func Test(t *testing.T) {
 		` "Best Director (Nomin.)"` +
 		` "Best Picture (Nomin.)"))` +
 		` (sequel nil))`
-	var got = string(data)
+	got := string(data)
 	if want != got {
 		t.Fatalf("Marshal failed: want: %s\ngot: %s\n", want, got)
 	}
