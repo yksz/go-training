@@ -34,16 +34,21 @@ func Test(t *testing.T) {
 		},
 	}
 
+	// Encode it
 	data, err := Marshal(strangelove)
 	if err != nil {
 		t.Fatalf("Marshal failed: %v", err)
 	}
+	t.Logf("Marshal() = %s\n", data)
 
+	// Decode it
 	var movie Movie
 	if err := json.Unmarshal(data, &movie); err != nil {
 		t.Fatalf("Unmarshal failed: %v:", err)
 	}
+	t.Logf("Unmarshal() = %+v\n", movie)
 
+	// Check equality.
 	if !reflect.DeepEqual(movie, strangelove) {
 		t.Fatal("not equal")
 	}
