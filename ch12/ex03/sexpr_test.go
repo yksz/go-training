@@ -35,7 +35,7 @@ func Example2() {
 		Interface  interface{}
 	}
 	obj := object{
-		Bool:       true,
+		Bool:       false,
 		Float64:    3.4,
 		Complex128: 3 + 4i,
 		Interface:  []string{"1", "2", "3"},
@@ -49,5 +49,5 @@ func Example2() {
 	fmt.Printf("%s\n", data)
 
 	// Output:
-	// ((Bool t) (Float64 3.400000) (Complex128 #C(3.000000 4.000000)) (Interface ("[]string" ("1" "2" "3"))))
+	// ((Bool nil) (Float64 3.400000) (Complex128 #C(3.000000 4.000000)) (Interface ("[]string" ("1" "2" "3"))))
 }
