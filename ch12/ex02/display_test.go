@@ -9,6 +9,7 @@ func Example_cycle() {
 	var c Cycle
 	c = Cycle{42, &c}
 	Display("c", c)
+
 	// Output:
 	// Display c (display.Cycle):
 	// c.Value = 42
