@@ -10,8 +10,8 @@ func TestEqual(t *testing.T) {
 		{1, 1, true},
 		{1, 2, false},  // different values
 		{1, 1.0, true}, // different types
-		{1, 1.0 + 1.0e-10, false},
-		{1, 1.0 + 0.9e-10, true},
+		{1, 1.0 + 1.0e-9, false},
+		{1, 1.0 + 0.9e-9, true},
 	} {
 		if Equal(test.x, test.y) != test.want {
 			t.Errorf("Equal(%v, %v) = %t",

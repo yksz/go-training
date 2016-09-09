@@ -9,7 +9,7 @@ func equal(x, y reflect.Value) bool {
 	xf := toFloat64(x)
 	yf := toFloat64(y)
 	diff := math.Abs(xf - yf)
-	return diff < 1.0e-10
+	return diff < 1.0e-9
 }
 
 func toFloat64(x reflect.Value) float64 {
